@@ -1,7 +1,6 @@
 {
   "name": "st",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +8,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3"
-  }
+    "express": "^4.17.3",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vanya1Koval/SecondNodeHomework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vanya1Koval/SecondNodeHomework/issues"
+  },
+  "homepage": "https://github.com/Vanya1Koval/SecondNodeHomework#readme",
+  "description": ""
 }

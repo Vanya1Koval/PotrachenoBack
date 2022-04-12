@@ -1,40 +1,34 @@
-const fs = require('fs')
-const pathToStorage = require('path').resolve(__dirname, '../storage.json');
+const sequelize = require('../connection');
+
 
 class UserService {
-    getUsersFromStorage() {
-        const rawData = fs.readFileSync(pathToStorage);
+    
+    async getUsersFromStorage() {
+        const rawData = await sequelize.query('SELECT * FROM db.users')
         return JSON.parse(rawData);
     }
 
-    writeUsersToStorage(users) {
-        fs.writeFileSync(pathToStorage, JSON.stringify(users));
+    async getAll() {
+        const rawData = await sequelize.query('SELECT * FROM db.users')
+        return JSON.parse(rawData);
     }
 
-    getAll() {
-        const users = this.getUsersFromStorage();
-        console.log(users)
-        return users;
+    async getOne(id) {
+        const rawData = await sequelize.query(`SELECT * FROM db.users WHERE id = '${id}'`)
+        return JSON.parse(rawData);
     }
 
-    getOne(id) {
-        const users = this.getUsersFromStorage();
-        return users.find(user => user.id === id)
-    }
-
-    create(id, name) {
-        const users = this.getUsersFromStorage();
-        if (users.findIndex(user => user.id === id)) {
-            return 'id alredy exist';
-        } else {
-        users.push({ id, name });
-        this.writeUsersToStorage(users)
+    async create(id, name) {
+        const users = await this.getUsersFromStorage();
+        if (users.find(user => user.id === id)) {return 'id already exist'}
+        else{
+        sequelize.create({ id, name });
         return { id, name };
         }
     }
 
-    update(id, name) {
-        const users = this.getUsersFromStorage();
+    async update(id, name) {
+        const users = await this.getUsersFromStorage();
 
         const userIndex = users.findIndex(user => user.id === id);
 
@@ -42,19 +36,25 @@ class UserService {
             return null;
         }
 
-        users[userIndex].name = name;
-        this.writeUsersToStorage(users)
+        sequelize.update({ name }, {
+            where: {
+              id: `${id}`
+            }
+          })
         return { id, name };
     }
 
-    delete(id) {
-        const users = this.getUsersFromStorage();
+    async delete(id) {
+        const users = await this.getUsersFromStorage();
         const userIndex = users.findIndex(user => user.id === id);
         if (!userIndex && userIndex !== 0) {
             return null;
         }
-        users.splice(userIndex, 1)
-        this.writeUsersToStorage(users)
+        sequelize.destroy({
+            where: {
+                id: `${id}`
+            }
+          });
         return true;
     }
 }

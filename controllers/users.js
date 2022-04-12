@@ -1,14 +1,15 @@
 const userServiceClass = require('../services/users')
-const userService = new userServiceClass()
+const userService = new userServiceClass() 
 
-const getAllUsers = (req, res) =>  {
-    const users = userService.getAll();
+
+const  getAllUsers = async (req, res) =>  {
+    const users = await userService.getAll();
     res.json(users);
 };
 
-const getUser = (req, res) =>  {
+const getUser = async (req, res) =>  {
     const { id } = req.params;
-    const user = userService.getOne(id);
+    const user =  await userService.getOne(id);
     if (user) {
         res.json(user);
     } else {
@@ -18,7 +19,6 @@ const getUser = (req, res) =>  {
 
 const createUser = (req, res) =>  {
     const { id, name } = req.body;
-    
     const user = userService.create(id, name);
     if (user) {
         res.json(user);
