@@ -5,20 +5,22 @@ const { QueryTypes } = require('sequelize');
 
 class UserService {
     
-    async getUsersFromStorage() {
+     async getUsersFromStorage() {
         const rawData = await sequelize.query('SELECT * FROM `users`', { type: QueryTypes.SELECT });
-        console.log(rawData)
+        //console.log(rawData)
         return rawData;
-    }
+    } 
 
     async getAll() {
         const rawData = await sequelize.query('SELECT * FROM users', { type: QueryTypes.SELECT })
         console.log(rawData)
         return rawData;
-    }
+    } 
 
     async getOne(id) {
-        const rawData = await sequelize.query(`SELECT * FROM users WHERE id = '${id}'`, { type: QueryTypes.SELECT })
+        console.log(id);
+        const rawData = await sequelize.query(`SELECT * FROM users WHERE id = "${id}"`, { type: QueryTypes.SELECT })
+        console.log(rawData);
         return rawData;
     }
 
@@ -26,40 +28,20 @@ class UserService {
         const users = await this.getUsersFromStorage();
         if (users.find(user => user.id === id)) {return 'id already exist'}
         else{
-        sequelize.create({ id, name });
+            sequelize.query(`INSERT INTO users (id, name) VALUES (${id}, '${name}')`)
         return { id, name };
         }
     }
 
     async update(id, name) {
-        const users = await this.getUsersFromStorage();
+        
+        sequelize.query(`UPDATE users SET name = '${name}' WHERE id = ${id}`)
 
-        const userIndex = users.findIndex(user => user.id === id);
-
-        if (!userIndex && userIndex !== 0) {
-            return null;
-        }
-
-        sequelize.update({ name }, {
-            where: {
-              id: `${id}`
-            }
-          })
         return { id, name };
     }
 
     async delete(id) {
-        const users = await this.getUsersFromStorage();
-        const userIndex = users.findIndex(user => user.id === id);
-        if (!userIndex && userIndex !== 0) {
-            return null;
-        }
-        sequelize.destroy({
-            where: {
-                id: `${id}`
-            }
-          });
-        return true;
+        sequelize.query(`DELETE FROM users WHERE id = ${id}`)
     }
 }
     
