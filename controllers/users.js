@@ -3,19 +3,33 @@ const userService = new userServiceClass()
 
 
 const  getAllUsers = async (req, res) =>  {
+    const { id } = req.body;
+    console.log(id);
+    if (id == undefined) {
     const users = await userService.getAll();
     res.json(users);
-};
+    }
+    else {
+        const user =  await userService.getOne(id);
+        if (user) {
+        res.json(user);
+        } else {
+        res.status(404).send(`User with id ${id} doesn't exist`)
+    } 
+    }
+};  
 
-const getUser = async (req, res) =>  {
-    const { id } = req.params;
+/* const getUser = async (req, res) =>  {
+     console.log(req.body);
+    const { id } = req.body;
+    console.log(id);
     const user =  await userService.getOne(id);
     if (user) {
         res.json(user);
     } else {
         res.status(404).send(`User with id ${id} doesn't exist`)
-    }
-};
+    } 
+}; */
 
 const createUser = (req, res) =>  {
     const { id, name } = req.body;
@@ -59,4 +73,4 @@ const deleteUser = (req, res) =>  {
     }
 };
 
-module.exports = { getAllUsers, getUser, createUser, updateUser, deleteUser };
+module.exports = {  getAllUsers,  /* getUser, */ createUser, updateUser, deleteUser };
