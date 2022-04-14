@@ -2,11 +2,11 @@ const sequelize = require('../connection');
 const { QueryTypes } = require('sequelize');
 
 class UserService {
-    
+
     async getAll() {
         const rawData = await sequelize.query('SELECT * FROM users', { type: QueryTypes.SELECT })
         return rawData;
-    } 
+    }
 
     async getOne(id) {
         const rawData = await sequelize.query(`SELECT * FROM users WHERE id = "${id}"`, { type: QueryTypes.SELECT })
@@ -27,5 +27,5 @@ class UserService {
         sequelize.query(`DELETE FROM users WHERE id = ${id}`)
     }
 }
-    
+
 module.exports = UserService;
