@@ -2,21 +2,6 @@ const express = require('express');
 
 const app = express();
 const userRouter = require('./routes/users');
-const sequelize = require('./connection');
-
-
-
-
-/* app.get("/user", async function(req, res){
-    const users = await sequelize.query('SELECT * FROM db.users')
-    res.json(users)
-});
-
-app.get("/:id", async function(req, res, next){
-    const { id } = req.params;
-    const users = await sequelize.query(`SELECT * FROM db.users WHERE idUsers = ${id}`);
-    res.json(users);
-}); */
 
 app.use(express.json());
 
