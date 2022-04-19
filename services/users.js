@@ -3,11 +3,7 @@ const sequelize = require('../connection.js');
 const { QueryTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
 
-
-
-
 function generateAccessToken(login) {
-    
     return jwt.sign(login, process.env.TOKEN_SECRET);
   }
 
@@ -44,6 +40,12 @@ class UserService {
     async delete(id) {
         sequelize.query(`DELETE FROM users WHERE id = '${id}'`)
     }
+
+    genToken(login) {
+        const token = generateAccessToken(login);
+        return { token };
+    }
+
 }
 
-module.exports = UserService;
+module.exports =  UserService ;
