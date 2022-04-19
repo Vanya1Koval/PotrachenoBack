@@ -27,13 +27,13 @@ class UserService {
     async create(name, login, passwordHash) {
         const token = generateAccessToken(login);
         sequelize.query(`INSERT INTO users ( name, login, password) VALUES ('${name}','${login}', '${passwordHash}')`);
-        return { name, login, passwordHash, token };
+        return await { name, login, passwordHash, token };
     }
 
     async update(id, name, login, passwordHash) {
         const token = generateAccessToken(login);
         sequelize.query(`UPDATE users SET name = '${name}', login = '${login}', password = '${passwordHash}' WHERE id = '${id}'`)
-        return { id, name, login, passwordHash, token };
+        return await { id, name, login, passwordHash, token };
     }
 
     async delete(id) {
