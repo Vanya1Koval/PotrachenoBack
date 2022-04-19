@@ -30,12 +30,12 @@ const createUser = async (req, res) => {
     try {
         const { name, login, password } = req.body;
         const userLogin = await userService.getOneByLogin(login);
-        if (userLogin[0] || !login || !password) {
-            res.status(404).send(`Login ${login} already taken or you entered empty login/password`)
-        } else {
+        if (!userLogin[0]) {
             const passwordHash = bcrypt.hashSync(password, salt)
             const user = await userService.create(name, login, passwordHash);
             return res.json(user);
+        } else {
+            res.status(404).send(`Login ${login} already taken or you entered empty login/password`)
         }
     } catch(e) {
             console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
