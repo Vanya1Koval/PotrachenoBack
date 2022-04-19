@@ -22,7 +22,7 @@ const getAllUsers = async (req, res) => {
             }
         }
     } catch(e) {
-        console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }
 };
 
@@ -38,7 +38,7 @@ const createUser = async (req, res) => {
             res.status(404).send(`Login ${login} already taken or you entered empty login/password`)
         }
     } catch(e) {
-            console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+            console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }  
 };
 
@@ -55,7 +55,7 @@ const updateUser = async (req, res) => {
             return res.status(404).send(`User with id ${id} doesn't exist or you entered empty login/password`)
         }
     } catch(e) {
-        console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }
 };
 
@@ -71,7 +71,7 @@ const deleteUser = async (req, res) => {
             return res.status(404).send(`User with id ${id} doesn't exist`)
         }
     } catch(e) {
-        console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }  
 };
 
@@ -89,7 +89,7 @@ const loginUser = async (req, res) => {
             res.send('Wrong login/password');
         } 
     } catch(e) {
-            console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+            console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }  
 };
 
