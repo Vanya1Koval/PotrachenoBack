@@ -25,7 +25,6 @@ class UserService {
     }
 
     async create(name, login, passwordHash) {
-        console.log(process.env.TOKEN_SECRET)
         const token = generateAccessToken(login);
         sequelize.query(`INSERT INTO users ( name, login, password) VALUES ('${name}','${login}', '${passwordHash}')`);
         return { name, login, passwordHash, token };
