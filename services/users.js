@@ -37,7 +37,7 @@ class UserService {
     }
 
     async delete(id) {
-        sequelize.query(`DELETE FROM users WHERE id = '${id}'`)
+       return sequelize.query(`DELETE FROM users WHERE id = '${id}'`)
     }
 
     genToken(login) {
