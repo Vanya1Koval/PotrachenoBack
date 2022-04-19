@@ -79,9 +79,7 @@ const loginUser = async (req, res) => {
     try {
         const { login, password } = req.body;
         const userLogin = await userService.getOneByLogin(login);
-        console.log(userLogin);
         const passwordHash = bcrypt.hashSync(password, salt);
-        console.log(passwordHash);
          if (userLogin[0] && bcrypt.compareSync(password, userLogin[0].password)) {
             const token = userService.genToken(login);
             return res.json(token);
