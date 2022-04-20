@@ -1,7 +1,8 @@
 const dotenv = require('dotenv').config();
 const sequelize = require('../connection.js');
-const { QueryTypes } = require('sequelize');
+const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
+const { default: mongoose } = require('mongoose');
 
 function generateAccessToken(login) {
     return jwt.sign(login, process.env.TOKEN_SECRET);
@@ -9,35 +10,37 @@ function generateAccessToken(login) {
 
 class UserService {
 
+    userModel = mongoose.model('User');
+
     async getAll() {
-        const rawData = await sequelize.query('SELECT * FROM users', { type: QueryTypes.SELECT })
-        return rawData;
+        return this.userModel.find();
     }
 
     async getOne(id) {
-        const rawData = await sequelize.query(`SELECT * FROM users WHERE id = "${id}"`, { type: QueryTypes.SELECT })
-        return rawData;
+        return this.userModel.findById(id);
     }
 
     async getOneByLogin(login) {
-        const rawData = await sequelize.query(`SELECT * FROM users WHERE login = "${login}"`, { type: QueryTypes.SELECT })
-        return rawData;
+        return this.userModel.findOne({login: `${login}`});
     }
 
     async create(name, login, passwordHash) {
-        const token = generateAccessToken(login);
-        sequelize.query(`INSERT INTO users ( name, login, password) VALUES ('${name}','${login}', '${passwordHash}')`);
-        return await { name, login, passwordHash, token };
+        const user = new this.userModel({ name: name, login: login, password: passwordHash});
+        user.save(function(err){
+            if(err) return console.log(err);
+        });
+        return await { name, login, passwordHash };
     }
 
     async update(id, name, login, passwordHash) {
-        const token = generateAccessToken(login);
-        sequelize.query(`UPDATE users SET name = '${name}', login = '${login}', password = '${passwordHash}' WHERE id = '${id}'`)
-        return await { id, name, login, passwordHash, token };
+        return this.userModel.findOneAndUpdate({_id: `${id}`}, 
+        { $set: {name: `${name}`, login: `${login}`, password: `${passwordHash}`}},
+        {returnOriginal: false}
+        )
     }
 
     async delete(id) {
-       return sequelize.query(`DELETE FROM users WHERE id = '${id}'`)
+        return this.userModel.findOneAndDelete({_id: `${id}`});
     }
 
     genToken(login) {

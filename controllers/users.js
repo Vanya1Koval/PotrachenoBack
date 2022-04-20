@@ -7,22 +7,19 @@ const salt = bcrypt.genSaltSync(10);
 
 
 const getAllUsers = async (req, res) => {
+    const { _id } = req.body;
     try {
-        const { id } = req.body;
-        if (!id) {
+        if (!_id) {
             const users = await userService.getAll();
             return res.json(users);
         }
         else {
-            const user = await userService.getOne(id);
-            if (user[0]) {
-                return res.json(user);
-            } else {
-                return res.status(404).send(`User with id ${id} doesn't exist`)
-            }
+            const user = await userService.getOne(_id);
+            return res.json(user); 
         }
     } catch(e) {
         console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
+        return res.status(404).send(`User with id ${_id} doesn't exist`);
     }
 };
 
@@ -30,11 +27,12 @@ const createUser = async (req, res) => {
     try {
         const { name, login, password } = req.body;
         const userLogin = await userService.getOneByLogin(login);
-        if (!userLogin[0]) {
+        console.log(userLogin)
+         if (!userLogin) {
             const passwordHash = bcrypt.hashSync(password, salt)
-            const user = await userService.create(name, login, passwordHash);
+            const user = await userService.create( name, login, passwordHash );
             return res.json(user);
-        } else {
+         } else {
             res.status(404).send(`Login ${login} already taken or you entered empty login/password`)
         }
     } catch(e) {
@@ -44,34 +42,28 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { id, name, login, password  } = req.body;
-        const user = await userService.getOne(id);
-        if (user[0] && login && password) {
-            const passwordHash = bcrypt.hashSync(password, salt)
-            const updatedUser = await userService.update(id, name, login, passwordHash);
-            return res.json(updatedUser);
-        }
-        else {
-            return res.status(404).send(`User with id ${id} doesn't exist or you entered empty login/password`)
-        }
+        const { _id, name, login, password  } = req.body;
+        const passwordHash = bcrypt.hashSync(password, salt)
+        const updatedUser = await userService.update(_id, name, login, passwordHash);
+        return res.json(updatedUser);
     } catch(e) {
         console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }
 };
 
 const deleteUser = async (req, res) => {
+    const { _id } = req.body;
     try{
-        const { id } = req.body;
-        const user = await userService.getOne(id);
-        if (user[0]) {
-            await userService.delete(id);
-            return res.send(`user with id ${id} was deleted`);
+        if(_id){
+            await userService.delete(_id);      
+            res.send(`User with id ${_id} was deleted`);
         }
-        else {
-            return res.status(404).send(`User with id ${id} doesn't exist`)
+        else{
+            return res.status(404).send(`User with id ${_id} doesn't exist`);
         }
     } catch(e) {
-        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
+        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack); 
+        return res.status(404).send(`User with id ${_id} doesn't exist`);
     }  
 };
 
@@ -79,8 +71,8 @@ const loginUser = async (req, res) => {
     try {
         const { login, password } = req.body;
         const userLogin = await userService.getOneByLogin(login);
-        const passwordHash = bcrypt.hashSync(password, salt);
-         if (userLogin[0] && bcrypt.compareSync(password, userLogin[0].password)) {
+        console.log(userLogin.password)
+         if (userLogin && bcrypt.compareSync(password, userLogin.password)) {
             const token = userService.genToken(login);
             return res.json(token);
         } else {
