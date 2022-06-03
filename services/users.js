@@ -24,12 +24,12 @@ class UserService {
         return this.userModel.findOne({login: `${login}`});
     }
 
-    async create(name, login, passwordHash) {
-        const user = new this.userModel({ name: name, login: login, password: passwordHash});
+    async create( img, name, login, passwordHash ) {
+        const user = new this.userModel({ img: img, name: name, login: login, password: passwordHash});
         user.save(function(err){
             if(err) return console.log(err);
         });
-        return await { name, login, passwordHash };
+        return await { img, name, login, passwordHash };
     }
 
     async update(id, name, login, passwordHash) {

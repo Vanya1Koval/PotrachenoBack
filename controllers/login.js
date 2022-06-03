@@ -9,10 +9,9 @@ const loginUser = async (req, res) => {
     try {
         const { login, password } = req.body;
         const userLogin = await userService.getOneByLogin(login);
-        console.log(userLogin.password)
          if (userLogin && bcrypt.compareSync(password, userLogin.password)) {
             const token = userService.genToken(login);
-            return res.json(token);
+            return res.json(userLogin);
         } else {
             res.send('Wrong login/password');
         } 
