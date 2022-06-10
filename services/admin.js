@@ -1,6 +1,4 @@
-const dotenv = require('dotenv').config();
-const sequelize = require('../connection.js');
-const User = require('../models/user.js');
+const Admin = require('../models/admin.js');
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require('mongoose');
 
@@ -8,9 +6,9 @@ function generateAccessToken(login) {
     return jwt.sign(login, process.env.TOKEN_SECRET);
   }
 
-class UserService {
+class AdminService {
 
-    userModel = mongoose.model('User');
+    adminModel = mongoose.model('Admin');
 
     async getAll() {
         return this.userModel.find();
@@ -24,12 +22,13 @@ class UserService {
         return this.userModel.findOne({login: `${login}`});
     }
 
-    async create(  name, login, passwordHash ) {
-        const user = new this.userModel({  name: name, login: login, password: passwordHash });
-        user.save(function(err){
+    async create( userLogin ) {
+        const isAdmin = false
+        const admin = new this.adminModel({  userLogin: userLogin, isAdmin: isAdmin });
+        admin.save(function(err){
             if(err) return console.log(err);
         });
-        return await {  name, login, passwordHash };
+        return await { userLogin, isAdmin };
     }
 
     async update(id, name, login, passwordHash) {
@@ -50,4 +49,4 @@ class UserService {
 
 }
 
-module.exports =  UserService ;
+module.exports =  AdminService ;

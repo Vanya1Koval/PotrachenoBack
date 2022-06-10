@@ -1,6 +1,6 @@
-const userServiceClass = require('../services/users')
+const userServiceClass = require('../../services/users')
 const bcrypt = require('bcrypt');
-const multer = require('../middlware/multer.js');
+const multer = require('../../middlware/multer.js');
 const userService = new userServiceClass()
 
 const salt = bcrypt.genSaltSync(10);
