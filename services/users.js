@@ -1,5 +1,4 @@
 const dotenv = require('dotenv').config();
-const sequelize = require('../connection.js');
 const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require('mongoose');
@@ -25,7 +24,7 @@ class UserService {
     }
 
     async create(  name, login, passwordHash ) {
-        const user = new this.userModel({  name: name, login: login, password: passwordHash });
+        const user = new this.userModel({  name: name, login: login, password: passwordHash, friends: [], requests: [] });
         user.save(function(err){
             if(err) return console.log(err);
         });
@@ -38,6 +37,28 @@ class UserService {
         {returnOriginal: false}
         )
     }
+
+    async updatePic(img, _id) {
+        return this.userModel.findOneAndUpdate({_id: `${_id}`}, 
+        { $set: {img: `${img}`}},
+        {returnOriginal: false}
+        )
+    }
+
+    async updateFriends(userId, arrayId) {
+        return this.userModel.findOneAndUpdate({_id: `${userId}`}, 
+        { $set: {friends: arrayId}},
+        {returnOriginal: false}
+        )
+    }
+
+    async updateUserReq(userId, arrayId) {
+        return this.userModel.findOneAndUpdate({_id: `${userId}`}, 
+        { $set: {requests: arrayId}},
+        {returnOriginal: false}
+        )
+    }
+
 
     async delete(id) {
         return this.userModel.findOneAndDelete({_id: `${id}`});

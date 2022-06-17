@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 const postsSchema = new mongoose.Schema({
 	id: String,
     text: String,
     img: String,
     creatorId: String,
+    likes: Array,
+    comments: Array,
+    date: String
 }, {versionKey: false});
 
 

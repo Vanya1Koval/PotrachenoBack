@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     login: String,
     password: String,
     img: String,
+    friends: Array
 }, {versionKey: false});
 
 

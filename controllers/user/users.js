@@ -1,6 +1,6 @@
 const userServiceClass = require('../../services/users')
 const bcrypt = require('bcrypt');
-const multer = require('../../middlware/multer.js');
+const multer = require('../../middlware/multerUser.js');
 const userService = new userServiceClass()
 
 const salt = bcrypt.genSaltSync(10);
@@ -33,6 +33,18 @@ const updateUser = async (req, res) => {
     }
 };
 
+ const updatePic = async ( req, res) => {
+    try {
+        const { _id } = req.body;
+        console.log(req.file)
+        const img = req.file.filename
+         const updatedUser = await userService.updatePic(img, _id);
+        return res.json(updatedUser);
+    } catch(e) {
+        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
+    }
+}; 
+
 const deleteUser = async (req, res) => {
     const { _id } = req.body;
     try{
@@ -49,4 +61,4 @@ const deleteUser = async (req, res) => {
     }  
 };
 
-module.exports = { getAllUsers, updateUser, deleteUser };
+module.exports = { getAllUsers, updateUser, updatePic,  deleteUser };

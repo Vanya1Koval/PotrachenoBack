@@ -3,11 +3,11 @@ const uuid = require('uuid');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './files/');
+        cb(null, '../../../Desktop/ReactNAtive/RN/userPic');
     },
     filename: function(req, file, cb) {
         const arr = file.originalname.split('.');
-        cb(null, uuid.v4() + '.' + arr[arr.length - 1]);
+        cb(null, uuid.v4() + '.' + arr[arr.length - 1]);     
     }
 });
 

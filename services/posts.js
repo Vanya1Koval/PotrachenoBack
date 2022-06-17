@@ -1,5 +1,4 @@
 const dotenv = require('dotenv').config();
-const sequelize = require('../connection.js');
 const Post = require('../models/posts.js');
 const jwt = require('jsonwebtoken');
 const { default: mongoose } = require('mongoose');
@@ -25,17 +24,23 @@ class PostService {
     }
 
     async create( img, text, creatorId ) {
-        console.log(`!!!! ${creatorId}`)
-        const post = new this.postModel({ img: img, text: text, creatorId: creatorId});
+        const post = new this.postModel({ img: img, text: text, creatorId: creatorId, date: new Date()});
         post.save(function(err){
             if(err) return console.log(err);
         });
         return await { img, text };
     }
 
-    async update(id, name, login, passwordHash) {
-        return this.postModel.findOneAndUpdate({_id: `${id}`}, 
-        { $set: {name: `${name}`, login: `${login}`, password: `${passwordHash}`}},
+    async update(_id, text, img) {
+        return this.postModel.findOneAndUpdate({_id: `${_id}`}, 
+        { $set: {text: `${text}`, img: `${img}`}},
+        {returnOriginal: false}
+        )
+    }
+
+    async updatePic(_id, img) {
+        return this.postModel.findOneAndUpdate({_id: `${_id}`}, 
+        { $set: { img: `${img}`}},
         {returnOriginal: false}
         )
     }
