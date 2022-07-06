@@ -30,20 +30,23 @@ const getPostsByUserId = async (req, res) => {
 
 const createPost = async (req, res) => {
     try {
-        const { img, text, creatorId } = req.body;
-            console.log(creatorId)
-            const post = await postService.create( img, text, creatorId );
-            console.log(post);
-            return res.json(post);
+        const { text, creatorId } = req.body;
+        console.log(req.body)
+        const img = req.file.filename
+        console.log(img)
+        console.log(req.body)
+        const post = await postService.create( img, text, creatorId );
+        return res.json(post);
         }
      catch(e) {
-            console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
+        console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
     }  
 };
 
 const updatePost = async (req, res) => {
     try {
-        const { _id, text, img  } = req.body;
+        const { _id, text  } = req.body;
+        
         const updatedPost = await postService.update(_id, text, img );
         return res.json(updatedPost);
     } catch(e) {

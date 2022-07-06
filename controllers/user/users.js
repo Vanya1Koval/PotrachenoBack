@@ -24,9 +24,11 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { _id, name, login, password  } = req.body;
-        const passwordHash = bcrypt.hashSync(password, salt)
-        const updatedUser = await userService.update(_id, name, login, passwordHash);
+        const { _id, name } = req.body;
+        const img = req.file.filename
+        console.log(img)
+        console.log(req.body)
+        const updatedUser = await userService.update(_id, name, img );
         return res.json(updatedUser);
     } catch(e) {
         console.log('Error ' + e.name + ":" + e.message + "\n" + e.stack);
@@ -38,6 +40,7 @@ const updateUser = async (req, res) => {
         const { _id } = req.body;
         console.log(req.file)
         const img = req.file.filename
+        console.log(img)
          const updatedUser = await userService.updatePic(img, _id);
         return res.json(updatedUser);
     } catch(e) {

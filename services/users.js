@@ -31,9 +31,9 @@ class UserService {
         return await {  name, login, passwordHash };
     }
 
-    async update(id, name, login, passwordHash) {
+    async update(id, name, img) {
         return this.userModel.findOneAndUpdate({_id: `${id}`}, 
-        { $set: {name: `${name}`, login: `${login}`, password: `${passwordHash}`}},
+        { $set: {name: `${name}`, img: `${img}`}},
         {returnOriginal: false}
         )
     }

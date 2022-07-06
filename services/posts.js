@@ -38,12 +38,6 @@ class PostService {
         )
     }
 
-    async updatePic(_id, img) {
-        return this.postModel.findOneAndUpdate({_id: `${_id}`}, 
-        { $set: { img: `${img}`}},
-        {returnOriginal: false}
-        )
-    }
 
     async delete(id) {
         return this.postModel.findOneAndDelete({_id: `${id}`});

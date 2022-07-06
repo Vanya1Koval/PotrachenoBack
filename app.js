@@ -9,9 +9,11 @@ const friendsRouter = require('./routes/friends');
 
 app.use(express.json());
 
+app.use('/static', express.static(__dirname + '/public'));
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/friends', friendsRouter);
+
 
 connect.then(()=> {
     app.listen(3000, function() {

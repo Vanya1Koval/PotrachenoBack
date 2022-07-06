@@ -16,12 +16,23 @@ class UserService {
         ) 
     }
 
-    async updateUserReq(userId, id) {
-
+    async deleteRequest(userId, id) {
+        const user = await this.userModel.findById(userId);
+        const newArray = user.friends.filter((item) => item.id !== id);
         return this.userModel.findOneAndUpdate({_id: `${userId}`}, 
-        { $set: {requests: arrayId}},
+        { $set: {friends: newArray}},
         {returnOriginal: false}
-        )
+        ) 
+    }
+
+    async addFriend(userId, id, obj) {
+        const user = await this.userModel.findById(userId);
+        const newArray = user.friends.filter((item) => item.id !== id);
+        newArray.push(obj)
+        return this.userModel.findOneAndUpdate({_id: `${userId}`}, 
+        { $set: {friends: newArray}},
+        {returnOriginal: false}
+        ) 
     }
 
 

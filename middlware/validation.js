@@ -9,10 +9,12 @@ const userSchema = joi.object({
 });
     
 const validation = () => async (req, res, next) => {
+    console.log(req)
     try {
         await userSchema.validateAsync(req.body);
         next();
     } catch (err){
+        console.log(err.details)
         res.status(400).send(err.details);
     }
 }
